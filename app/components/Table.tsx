@@ -1,14 +1,14 @@
-interface TableCellProps {
+interface TableProps {
   number: number;
   width?: string;
   height?: string;
 }
 
-const TableCell = ({
+const Table = ({
   number,
   width = 'w-32 md:w-40',
   height = 'h-20 md:h-28',
-}: TableCellProps) => {
+}: TableProps) => {
   return (
     <div
       className={`bg-gray-300 rounded-lg ${width} ${height} flex items-center justify-center`}
@@ -18,4 +18,4 @@ const TableCell = ({
   );
 };
 
-export default TableCell;
+export default Table;
