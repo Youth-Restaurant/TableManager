@@ -11,13 +11,13 @@ const Page = () => {
           <div className='flex flex-col gap-12 bg-white'>
             {/* 1 행: 1, 2 */}
             <div className='flex gap-8 justify-between'>
-              <div className='bg-gray-300 rounded-lg h-32 w-40'>1</div>
-              <div className='bg-gray-300 rounded-lg h-32 w-40'>2</div>
+              <div className='bg-gray-300 rounded-lg h-28 w-40'>1</div>
+              <div className='bg-gray-300 rounded-lg h-28 w-40'>2</div>
             </div>
             {/* 2 행: 3, 4 */}
             <div className='flex gap-8 justify-between'>
-              <div className='bg-gray-300 rounded-lg h-32 w-40'>3</div>
-              <div className='bg-gray-300 rounded-lg h-32 w-40'>4</div>
+              <div className='bg-gray-300 rounded-lg h-28 w-40'>3</div>
+              <div className='bg-gray-300 rounded-lg h-28 w-40'>4</div>
             </div>
             <div className='invisible'>empty</div>
             {/* 3 행: 5, 6 */}
