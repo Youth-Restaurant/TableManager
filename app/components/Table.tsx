@@ -12,12 +12,14 @@ interface TableProps {
   number: number;
   width?: string;
   height?: string;
+  capacity?: number;
 }
 
 const Table = ({
   number,
   width = 'w-20 md:w-32',
   height = 'h-16 md:h-24',
+  capacity = 4,
 }: TableProps) => {
   return (
     <Dialog>
@@ -39,7 +41,7 @@ const Table = ({
             <p>현재 상태: 비어있음</p>
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <p>수용 인원: 4명</p>
+            <p>수용 인원: {capacity}명</p>
           </div>
         </div>
       </DialogContent>
