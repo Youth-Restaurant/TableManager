@@ -20,6 +20,15 @@ export const mockTables: TableData[] = [
     isReserved: false,
   },
   {
+    id: 3,
+    capacity: 4,
+    currentUsers: 0,
+    price: 10000,
+    menu: '점심특선',
+    visitTime: null,
+    isReserved: false,
+  },
+  {
     id: 4,
     capacity: 4,
     currentUsers: 0,
