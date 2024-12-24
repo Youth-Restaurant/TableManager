@@ -18,16 +18,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useRouter } from 'next/navigation';
 import { Checkbox } from '@/components/ui/checkbox';
-import { getTableData } from '@/mocks/mockTables';
 import { cn } from '@/lib/utils';
+import { TableData } from '@/types/table';
 
 interface TableProps {
-  number: number;
+  data: TableData;
   width?: string;
   height?: string;
-  // onUpdate?: (tableNumber: number, updatedData: any) => void;
+  onUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
 }
 
 const formatDate = (date: Date | null): string => {
@@ -84,97 +83,80 @@ const riceAndSoupItems = [
 ];
 
 const Table = ({
-  number,
+  data,
   width = 'w-20 md:w-32',
   height = 'h-16 md:h-24',
+  onUpdate,
 }: TableProps) => {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const tableData = getTableData(number);
-  const [currentUsers, setCurrentUsers] = useState(
-    tableData?.currentUsers || 0
-  );
-  const [selectedPrice, setSelectedPrice] = useState<number>(
-    menuOptions[0].price
-  );
-  const [selectedMenu, setSelectedMenu] = useState<string>(menuOptions[0].name);
-  const [basicChecklist, setBasicChecklist] = useState<{
-    [key: string]: boolean;
-  }>(Object.fromEntries(basicItems.map((item) => [item.id, false])));
-  const [sideChecklist, setSideChecklist] = useState<{
-    [key: string]: boolean;
-  }>(Object.fromEntries(sideItems.map((item) => [item.id, false])));
-  const [servingCounts, setServingCounts] = useState({
-    rice: 0,
-    soup: 0,
-  });
-  const [visitTime, setVisitTime] = useState<Date | null>(
-    tableData?.visitTime || null
-  );
 
-  // 제공 수량 증가 함수
+  if (!data) return <div>loading...</div>;
+
+  // Remove local states and use data from props
+  const {
+    id,
+    currentUsers,
+    capacity,
+    menu,
+    price,
+    visitTime,
+    basicChecklist,
+    sideChecklist,
+    servingCounts,
+  } = data;
+
+  // Update handlers to use onUpdate prop
+  const handleIncrement = () => {
+    if (currentUsers < capacity) {
+      onUpdate(id, { currentUsers: currentUsers + 1 });
+    }
+  };
+
+  const handleDecrement = () => {
+    if (currentUsers > 0) {
+      onUpdate(id, { currentUsers: currentUsers - 1 });
+    }
+  };
+
   const handleServingIncrement = (itemId: string) => {
     if (servingCounts[itemId as keyof typeof servingCounts] < currentUsers) {
-      setServingCounts((prev) => ({
-        ...prev,
-        [itemId]: prev[itemId as keyof typeof servingCounts] + 1,
-      }));
+      onUpdate(id, {
+        servingCounts: {
+          ...servingCounts,
+          [itemId]: servingCounts[itemId as keyof typeof servingCounts] + 1,
+        },
+      });
     }
   };
 
   // 제공 수량 감소 함수
   const handleServingDecrement = (itemId: string) => {
     if (servingCounts[itemId as keyof typeof servingCounts] > 0) {
-      setServingCounts((prev) => ({
-        ...prev,
-        [itemId]: prev[itemId as keyof typeof servingCounts] - 1,
-      }));
-    }
-  };
-
-  const handleIncrement = () => {
-    if (currentUsers < (tableData?.capacity || 0)) {
-      setCurrentUsers((prev) => prev + 1);
-    }
-  };
-
-  const handleDecrement = () => {
-    if (currentUsers > 0) {
-      setCurrentUsers((prev) => prev - 1);
+      onUpdate(id, {
+        servingCounts: {
+          ...servingCounts,
+          [itemId]: servingCounts[itemId as keyof typeof servingCounts] - 1,
+        },
+      });
     }
   };
 
   const handleUpdate = async () => {
     try {
-      // Update visit time when table becomes occupied
       const newVisitTime = currentUsers > 0 ? new Date() : null;
-      setVisitTime(newVisitTime);
 
       const updatedData = {
-        number,
+        visitTime: newVisitTime,
         currentUsers,
-        menu: selectedMenu,
-        price: selectedPrice,
-        visitTime: newVisitTime?.toISOString() || null,
+        menu,
+        price,
         basicChecklist,
         sideChecklist,
+        servingCounts,
       };
 
-      const response = await fetch('/api/tables', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update table data');
-      }
-
+      onUpdate(id, updatedData);
       setOpen(false);
-
-      router.refresh();
     } catch (error) {
       console.error('Error updating table:', error);
     }
@@ -182,8 +164,8 @@ const Table = ({
 
   // 총 가격 계산
   const calculateTotalPrice = useCallback(() => {
-    return selectedPrice * currentUsers;
-  }, [selectedPrice, currentUsers]);
+    return price * currentUsers;
+  }, [price, currentUsers]);
 
   // 기본 세팅이 모두 완료되었는지 확인하는 함수
   const isBasicChecklistComplete = useCallback(() => {
@@ -252,7 +234,7 @@ const Table = ({
       case 'basic':
         return 'bg-gray-300'; // 기본 세팅 진행 중
       case 'side':
-        return 'bg-orange-400'; // 밑반찬 세팅 중
+        return 'bg-orange-400'; // 밑반찬 ��팅 중
       case 'main':
         return 'bg-blue-500'; // 밥과 국 서빙 중
       case 'complete':
@@ -276,7 +258,7 @@ const Table = ({
           onClick={() => setOpen(true)}
         >
           <span className='text-white font-bold text-xl md:text-2xl'>
-            {number} ({currentUsers}/{tableData?.capacity})
+            {id} ({currentUsers}/{data?.capacity})
           </span>
           <div className='text-white text-base font-semibold mt-2'>
             {getStatusDisplay()}
@@ -285,7 +267,7 @@ const Table = ({
       </DialogTrigger>
       <DialogContent className='max-w-4xl'>
         <DialogHeader>
-          <DialogTitle>테이블 {number}번</DialogTitle>
+          <DialogTitle>테이블 {id}번</DialogTitle>
         </DialogHeader>
 
         <div className='grid grid-cols-2 gap-6'>
@@ -297,7 +279,7 @@ const Table = ({
                 <td className='p-3'>
                   <div className='flex items-center justify-between'>
                     <span>
-                      {currentUsers} / {tableData?.capacity}
+                      {currentUsers} / {data?.capacity}
                     </span>
                     <div className='flex items-center gap-2'>
                       <Button
@@ -312,7 +294,7 @@ const Table = ({
                         variant='default'
                         size='sm'
                         onClick={handleIncrement}
-                        disabled={currentUsers >= (tableData?.capacity || 0)}
+                        disabled={currentUsers >= data?.capacity}
                         className='bg-blue-500 hover:bg-blue-600 text-white'
                       >
                         +
@@ -331,8 +313,8 @@ const Table = ({
                         (menu) => menu.name === value
                       );
                       if (selected) {
-                        setSelectedPrice(selected.price);
-                        setSelectedMenu(selected.name);
+                        onUpdate(id, { price: selected.price });
+                        onUpdate(id, { menu: selected.name });
                       }
                     }}
                   >
@@ -358,7 +340,7 @@ const Table = ({
                 <td className='p-3'>
                   <div className='space-y-2'>
                     <div className='text-sm text-gray-500'>
-                      {selectedPrice.toLocaleString()}원 × {currentUsers}명
+                      {price.toLocaleString()}원 × {currentUsers}명
                     </div>
                     <Input
                       type='text'
@@ -399,10 +381,12 @@ const Table = ({
                                 basicChecklist[item.id] ? 'bg-green-100' : ''
                               } cursor-pointer hover:bg-gray-50`}
                               onClick={() => {
-                                setBasicChecklist((prev) => ({
-                                  ...prev,
-                                  [item.id]: !prev[item.id],
-                                }));
+                                onUpdate(id, {
+                                  basicChecklist: {
+                                    ...basicChecklist,
+                                    [item.id]: !basicChecklist[item.id],
+                                  },
+                                });
                               }}
                             >
                               {item.label}
@@ -416,10 +400,12 @@ const Table = ({
                                 id={`basic-${item.id}`}
                                 checked={basicChecklist[item.id]}
                                 onCheckedChange={(checked) => {
-                                  setBasicChecklist((prev) => ({
-                                    ...prev,
-                                    [item.id]: checked === true,
-                                  }));
+                                  onUpdate(id, {
+                                    basicChecklist: {
+                                      ...basicChecklist,
+                                      [item.id]: checked === true,
+                                    },
+                                  });
                                 }}
                               />
                             </td>
@@ -463,10 +449,12 @@ const Table = ({
                               }`}
                               onClick={() => {
                                 if (isBasicChecklistComplete()) {
-                                  setSideChecklist((prev) => ({
-                                    ...prev,
-                                    [item.id]: !prev[item.id],
-                                  }));
+                                  onUpdate(id, {
+                                    sideChecklist: {
+                                      ...sideChecklist,
+                                      [item.id]: !sideChecklist[item.id],
+                                    },
+                                  });
                                 }
                               }}
                             >
@@ -482,10 +470,12 @@ const Table = ({
                                 checked={sideChecklist[item.id]}
                                 disabled={!isBasicChecklistComplete()}
                                 onCheckedChange={(checked) => {
-                                  setSideChecklist((prev) => ({
-                                    ...prev,
-                                    [item.id]: checked === true,
-                                  }));
+                                  onUpdate(id, {
+                                    sideChecklist: {
+                                      ...sideChecklist,
+                                      [item.id]: checked === true,
+                                    },
+                                  });
                                 }}
                               />
                             </td>

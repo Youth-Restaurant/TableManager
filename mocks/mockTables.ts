@@ -1,6 +1,11 @@
 import { TableData } from '../types/table';
 
-export const mockTables: TableData[] = [
+type PickTableData = Pick<
+  TableData,
+  'id' | 'capacity' | 'currentUsers' | 'menu' | 'price' | 'visitTime'
+>;
+
+export const mockTables: PickTableData[] = [
   {
     id: 1,
     capacity: 4,
@@ -8,7 +13,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 2,
@@ -17,7 +21,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 3,
@@ -26,7 +29,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 4,
@@ -35,7 +37,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 5,
@@ -44,7 +45,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 6,
@@ -53,7 +53,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 7,
@@ -62,7 +61,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 8,
@@ -71,7 +69,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 9,
@@ -80,7 +77,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 10,
@@ -89,7 +85,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 11,
@@ -98,7 +93,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 12,
@@ -107,7 +101,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 13,
@@ -116,7 +109,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 14,
@@ -125,7 +117,6 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
   {
     id: 15,
@@ -134,10 +125,9 @@ export const mockTables: TableData[] = [
     price: 10000,
     menu: '점심특선',
     visitTime: null,
-    isReserved: false,
   },
 ];
 
-export const getTableData = (id: number): TableData | undefined => {
+export const getTableData = (id: number): PickTableData | undefined => {
   return mockTables.find((table) => table.id === id);
 };

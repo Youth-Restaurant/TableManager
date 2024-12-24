@@ -1,11 +1,16 @@
 export interface TableData {
   id: number;
-  capacity: number;
   currentUsers: number;
-  price: number;
+  capacity: number;
   menu: string;
+  price: number;
   visitTime: Date | null;
-  isReserved: boolean;
+  basicChecklist: { [key: string]: boolean };
+  sideChecklist: { [key: string]: boolean };
+  servingCounts: {
+    rice: number;
+    soup: number;
+  };
 }
 
 export type TableStatus = 'empty' | 'in-use' | 'reserved';
