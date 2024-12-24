@@ -21,6 +21,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { Checkbox } from '@/components/ui/checkbox';
 import { getTableData } from '@/mocks/mockTables';
+import { cn } from '@/lib/utils';
 
 interface TableProps {
   number: number;
@@ -107,6 +108,9 @@ const Table = ({
     rice: 0,
     soup: 0,
   });
+  const [visitTime, setVisitTime] = useState<Date | null>(
+    tableData?.visitTime || null
+  );
 
   // 제공 수량 증가 함수
   const handleServingIncrement = (itemId: string) => {
@@ -142,12 +146,16 @@ const Table = ({
 
   const handleUpdate = async () => {
     try {
+      // Update visit time when table becomes occupied
+      const newVisitTime = currentUsers > 0 ? new Date() : null;
+      setVisitTime(newVisitTime);
+
       const updatedData = {
         number,
         currentUsers,
         menu: selectedMenu,
         price: selectedPrice,
-        visitTime: new Date().toISOString(),
+        visitTime: newVisitTime?.toISOString() || null,
         basicChecklist,
         sideChecklist,
       };
@@ -256,7 +264,15 @@ const Table = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div
-          className={`${width} ${height} ${getTableColor()} p-1 border rounded-lg cursor-pointer hover:border-blue-500`}
+          className={cn(
+            width,
+            height,
+            getTableColor(),
+            'p-1 border rounded-lg cursor-pointer hover:border-blue-500',
+            currentUsers > 0 && getServingStage() === 'basic'
+              ? 'animate-pulse'
+              : ''
+          )}
           onClick={() => setOpen(true)}
         >
           <span className='text-white font-bold text-xl md:text-2xl'>
@@ -335,9 +351,7 @@ const Table = ({
               </tr>
               <tr className='border rounded-lg overflow-hidden'>
                 <td className='font-medium bg-gray-50 p-3'>방문 시간</td>
-                <td className='p-3'>
-                  {formatDate(tableData?.visitTime || null)}
-                </td>
+                <td className='p-3'>{formatDate(visitTime)}</td>
               </tr>
               <tr className='border rounded-lg overflow-hidden'>
                 <td className='font-medium bg-gray-50 p-3'>가격</td>
