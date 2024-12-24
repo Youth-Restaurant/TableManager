@@ -4,10 +4,10 @@ import LeftSection from '@/components/LeftSection';
 import MiddleSection from '@/components/MiddleSection';
 import RightSection from '@/components/RightSection';
 
-const handleTableUpdate = (tableNumber: number, updatedData: any) => {
-  // 여기에서 테이블 데이터 업데이트 로직 구현
-  console.log(`Table ${tableNumber} updated:`, updatedData);
-};
+// const handleTableUpdate = (tableNumber: number, updatedData: any) => {
+//   // 여기에서 테이블 데이터 업데이트 로직 구현
+//   console.log(`Table ${tableNumber} updated:`, updatedData);
+// };
 
 const Page = () => {
   return (

@@ -27,7 +27,7 @@ interface TableProps {
   number: number;
   width?: string;
   height?: string;
-  onUpdate?: (tableNumber: number, updatedData: any) => void;
+  // onUpdate?: (tableNumber: number, updatedData: any) => void;
 }
 
 const getTableStatus = (tableId: number): TableStatus => {
@@ -96,12 +96,10 @@ const Table = ({
   number,
   width = 'w-20 md:w-32',
   height = 'h-16 md:h-24',
-  onUpdate,
 }: TableProps) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const tableData = getTableData(number);
-  const status = getTableStatus(number);
   const [currentUsers, setCurrentUsers] = useState(
     tableData?.currentUsers || 0
   );
@@ -115,28 +113,10 @@ const Table = ({
   const [sideChecklist, setSideChecklist] = useState<{
     [key: string]: boolean;
   }>(Object.fromEntries(sideItems.map((item) => [item.id, false])));
-  const [riceAndSoupChecklist, setRiceAndSoupChecklist] = useState<{
-    [key: string]: boolean[];
-  }>(
-    Object.fromEntries(
-      riceAndSoupItems.map((item) => [item.id, Array(currentUsers).fill(false)])
-    )
-  );
   const [servingCounts, setServingCounts] = useState({
     rice: 0,
     soup: 0,
   });
-
-  // currentUsers가 변경될 때 체크리스트 업데이트
-  useEffect(() => {
-    setRiceAndSoupChecklist((prev) => {
-      const newChecklist: { [key: string]: boolean[] } = {};
-      for (const key in prev) {
-        newChecklist[key] = Array(currentUsers).fill(false);
-      }
-      return newChecklist;
-    });
-  }, [currentUsers]);
 
   // 제공 수량 증가 함수
   const handleServingIncrement = (itemId: string) => {
