@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -9,8 +9,6 @@ import {
   DialogTrigger,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { getTableData } from '@/mocks/mockTables';
-import { TableStatus } from '@/types/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -22,6 +20,7 @@ import {
 } from '@/components/ui/select';
 import { useRouter } from 'next/navigation';
 import { Checkbox } from '@/components/ui/checkbox';
+import { getTableData } from '@/mocks/mockTables';
 
 interface TableProps {
   number: number;
@@ -29,15 +28,6 @@ interface TableProps {
   height?: string;
   // onUpdate?: (tableNumber: number, updatedData: any) => void;
 }
-
-const getTableStatus = (tableId: number): TableStatus => {
-  const tableData = getTableData(tableId);
-  if (!tableData) return 'empty';
-
-  if (tableData.isReserved) return 'reserved';
-  if (tableData.currentUsers > 0) return 'in-use';
-  return 'empty';
-};
 
 const formatDate = (date: Date | null): string => {
   if (!date) return '-';
