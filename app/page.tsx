@@ -154,7 +154,7 @@ export default function Home() {
   return (
     <main className='min-h-screen w-full p-4'>
       <div className='container mx-auto h-full'>
-        <div className='mb-6 bg-white rounded-lg shadow'>
+        {/* <div className='mb-6 bg-white rounded-lg shadow'>
           <Button
             onClick={() => setIsOrderTableVisible(!isOrderTableVisible)}
             variant='ghost'
@@ -221,7 +221,7 @@ export default function Home() {
               </tbody>
             </table>
           )}
-        </div>
+        </div> */}
 
         <div className='flex flex-col md:flex-row gap-5 lg:gap-4 xl:gap-8'>
           <LeftSection
