@@ -422,7 +422,9 @@ const Table = ({ data, onUpdate }: TableProps) => {
           <table className='w-full border-collapse'>
             <tbody>
               <tr className='border rounded-lg overflow-hidden'>
-                <td className='font-medium bg-gray-50 p-3 w-1/4'>인원</td>
+                <td className='font-medium bg-gray-50 p-3 w-1/4 text-sm xl:text-base'>
+                  인원
+                </td>
                 <td className='p-3'>
                   <div className='flex items-center justify-between'>
                     <span>
@@ -451,7 +453,9 @@ const Table = ({ data, onUpdate }: TableProps) => {
                 </td>
               </tr>
               <tr className='border rounded-lg overflow-hidden'>
-                <td className='font-medium bg-gray-50 p-3'>메뉴</td>
+                <td className='font-medium bg-gray-50 p-3  text-sm xl:text-base'>
+                  메뉴
+                </td>
                 <td className='p-3'>
                   <Select
                     defaultValue={menuOptions[0].name}
@@ -481,11 +485,15 @@ const Table = ({ data, onUpdate }: TableProps) => {
                 </td>
               </tr>
               <tr className='border rounded-lg overflow-hidden'>
-                <td className='font-medium bg-gray-50 p-3'>방문 시간</td>
+                <td className='font-medium bg-gray-50 p-3  text-sm xl:text-base'>
+                  방문 시간
+                </td>
                 <td className='p-3'>{formatDate(visitTime)}</td>
               </tr>
               <tr className='border rounded-lg overflow-hidden'>
-                <td className='font-medium bg-gray-50 p-3'>가격</td>
+                <td className='font-medium bg-gray-50 p-3  text-sm xl:text-base'>
+                  가격
+                </td>
                 <td className='p-3'>
                   <div className='space-y-2'>
                     <div className='text-sm text-gray-500'>
@@ -504,17 +512,17 @@ const Table = ({ data, onUpdate }: TableProps) => {
           </table>
 
           {/* 오른쪽: 서빙 체크리스트 */}
-          <div className='space-y-6'>
+          <div className='space-y-1 xl:space-y-6'>
             {/* 기본 세팅 */}
             <table className='w-full border-collapse'>
               <thead>
                 <tr>
                   <th
-                    className='text-left p-3 bg-gray-50 border rounded-t-lg font-medium'
+                    className='text-left py-1 px-2 xl:p-3 bg-gray-50 border rounded-t-lg font-medium'
                     colSpan={6}
                   >
                     <div className='flex justify-between items-center'>
-                      <span>기본 세팅</span>
+                      <span className='text-sm xl:text-base'>기본 세팅</span>
                       <Button
                         variant='outline'
                         size='sm'
@@ -543,7 +551,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
                           <React.Fragment key={item.id}>
                             <td
                               className={cn(
-                                'p-3 border-b cursor-pointer hover:bg-gray-50',
+                                'p-1 xl:p-3 border-b cursor-pointer hover:bg-gray-50  text-sm xl:text-base',
                                 basicChecklist[item.id] ? 'bg-green-100' : ''
                               )}
                               onClick={() => {
@@ -559,7 +567,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
                             </td>
                             <td
                               className={cn(
-                                'p-3 w-12 text-center border-b',
+                                'py-2 xl:p-3 w-12 text-center border-b',
                                 basicChecklist[item.id] ? 'bg-green-100' : '',
                                 colIndex < 2 ? 'border-r' : ''
                               )}
@@ -590,11 +598,13 @@ const Table = ({ data, onUpdate }: TableProps) => {
               <thead>
                 <tr>
                   <th
-                    className='text-left p-3 bg-gray-50 border rounded-t-lg font-medium'
+                    className='text-left py-1 px-2 xl:p-3 bg-gray-50 border rounded-t-lg font-medium'
                     colSpan={6}
                   >
                     <div className='flex justify-between items-center'>
-                      <span>밑반찬 ({sideItems.length})</span>
+                      <span className='text-sm xl:text-base'>
+                        밑반찬 ({sideItems.length})
+                      </span>
                       <Button
                         variant='outline'
                         size='sm'
@@ -630,7 +640,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
                           <React.Fragment key={item.id}>
                             <td
                               className={cn(
-                                'p-3 border-b',
+                                'p-1 xl:p-3 border-b text-sm xl:text-base',
                                 sideChecklist[item.id] ? 'bg-green-100' : '',
                                 Object.values(basicChecklist).every(Boolean)
                                   ? 'cursor-pointer hover:bg-gray-50'
@@ -654,7 +664,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
                             </td>
                             <td
                               className={cn(
-                                'p-3 w-12 text-center border-b',
+                                'py-2 xl:p-3 w-12 text-center border-b',
                                 sideChecklist[item.id] ? 'bg-green-100' : '',
                                 colIndex < 2 ? 'border-r' : ''
                               )}
@@ -688,11 +698,11 @@ const Table = ({ data, onUpdate }: TableProps) => {
               <thead>
                 <tr>
                   <th
-                    className='text-left p-3 bg-gray-50 border rounded-t-lg font-medium'
+                    className='text-left py-1 px-2 xl:p-3 bg-gray-50 border rounded-t-lg font-medium'
                     colSpan={2}
                   >
                     <div className='flex justify-between items-center'>
-                      <span>밥과 국</span>
+                      <span className='text-sm xl:text-base'>밥과 국</span>
                       <Button
                         variant='outline'
                         size='sm'
@@ -733,8 +743,10 @@ const Table = ({ data, onUpdate }: TableProps) => {
                         : ''
                     }
                   >
-                    <td className='p-3 border-b font-medium'>{item.label}</td>
-                    <td className='p-3 border-b'>
+                    <td className='px-3 xl:p-3 border-b font-medium text-sm xl:text-base'>
+                      {item.label}
+                    </td>
+                    <td className='p-1 xl:p-3 border-b'>
                       <div className='flex items-center justify-between'>
                         <span>
                           {servingCounts[item.id as keyof typeof servingCounts]}
