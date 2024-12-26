@@ -1,5 +1,6 @@
 export interface TableData {
   id: number;
+  status: TableStatus;
   currentUsers: number;
   capacity: number;
   menu: string;
@@ -13,4 +14,4 @@ export interface TableData {
   };
 }
 
-export type TableStatus = 'empty' | 'in-use' | 'reserved';
+export type TableStatus = 'AVAILABLE' | 'RESERVED' | 'OCCUPIED' | 'FINISHED';
