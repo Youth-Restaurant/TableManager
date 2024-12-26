@@ -808,7 +808,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
           </div>
         </div>
 
-        <DialogFooter className='mt-6 flex flex-col gap-2'>
+        <DialogFooter className='mt-2 xl:mt-6 flex flex-col gap-2'>
           <Button
             className='bg-blue-500 hover:bg-blue-600 text-white w-full text-base font-semibold'
             onClick={handleUpdate}
