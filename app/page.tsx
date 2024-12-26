@@ -5,7 +5,7 @@ import { mockTables } from '@/mocks/mockTables';
 import { TableData } from '@/types/table';
 import Table from '@/components/Table';
 import TableManager from '@/utils/TableManager';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 
 const defaultBasicChecklist = {
   tablecloth: false,
@@ -88,21 +88,21 @@ export default function Home() {
   // };
 
   // 방문 순서 (기존)
-  const getVisitOrder = () => {
-    return tableManager
-      .getTables()
-      .filter(
-        (table) =>
-          table.visitTime &&
-          table.currentUsers > 0 &&
-          !isBasicChecklistComplete(table)
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.visitTime!).getTime() - new Date(b.visitTime!).getTime()
-      )
-      .map((table) => table.id);
-  };
+  // const getVisitOrder = () => {
+  //   return tableManager
+  //     .getTables()
+  //     .filter(
+  //       (table) =>
+  //         table.visitTime &&
+  //         table.currentUsers > 0 &&
+  //         !isBasicChecklistComplete(table)
+  //     )
+  //     .sort(
+  //       (a, b) =>
+  //         new Date(a.visitTime!).getTime() - new Date(b.visitTime!).getTime()
+  //     )
+  //     .map((table) => table.id);
+  // };
 
   // 기본 세팅이 모두 체크 완료된지 확인하는 함수
   const isBasicChecklistComplete = (table: TableData): boolean => {
@@ -149,7 +149,7 @@ export default function Home() {
       .map((table) => table.id);
   };
 
-  const [isOrderTableVisible, setIsOrderTableVisible] = useState(false);
+  // const [isOrderTableVisible, setIsOrderTableVisible] = useState(false);
 
   return (
     <main className='min-h-screen w-full p-4'>
