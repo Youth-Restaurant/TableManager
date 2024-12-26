@@ -32,10 +32,10 @@ const defaultSideChecklist = {
 };
 
 export default function Home() {
-  const [basicChecklist, setBasicChecklist] = useState(defaultBasicChecklist);
-  const [sideChecklist, setSideChecklist] = useState(defaultSideChecklist);
+  // const [basicChecklist, setBasicChecklist] = useState(defaultBasicChecklist);
+  // const [sideChecklist, setSideChecklist] = useState(defaultSideChecklist);
 
-  const [tablesData, setTablesData] = useState<TableData[]>(() =>
+  const [tablesData] = useState<TableData[]>(() =>
     mockTables.map((table) => ({
       ...table,
       status: 'AVAILABLE',

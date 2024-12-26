@@ -87,8 +87,6 @@ const riceAndSoupItems = [
 const Table = ({ data, onUpdate }: TableProps) => {
   const [open, setOpen] = useState(false);
 
-  if (!data) return <div>loading...</div>;
-
   // 구조 분해
   const {
     id,
@@ -331,6 +329,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
     getServingStage() === 'basic' && currentUsers > 0
       ? 'animate-pulse bg-gray-300'
       : '';
+  if (!data) return <div>loading...</div>;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
