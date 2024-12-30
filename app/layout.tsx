@@ -15,6 +15,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: '테이블 매니저',
   description: '테이블 매니저',
+  manifest: '/manifest.json',
+  icons: '/images/web-app-manifest-192x192.png',
 };
 
 export default function RootLayout({
