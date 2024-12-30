@@ -286,14 +286,16 @@ const Table = ({ data, onUpdate }: TableProps) => {
         } / ${sideItems.length}`;
       case 'main':
         return (
-          <>
+          <div className='flex gap-3'>
             <span>
-              밥: {servingCounts.rice}/{currentUsers}
+              밥: <span className='font-bold'>{servingCounts.rice}</span>/
+              {currentUsers}
             </span>
             <span>
-              국: {servingCounts.soup}/{currentUsers}
+              국: <span className='font-bold'>{servingCounts.soup}</span>/
+              {currentUsers}
             </span>
-          </>
+          </div>
         );
       case 'complete':
         return '서빙 완료';
