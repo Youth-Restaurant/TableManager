@@ -342,9 +342,9 @@ const Table = ({ data, onUpdate }: TableProps) => {
         <Card
           className={cn(
             // 모바일/태블릿 기본 스타일
-            'relative p-2 w-32 h-36 text-sm transition-shadow cursor-pointer',
+            'relative p-2 w-32 h-32 xl:h-36 text-sm transition-shadow cursor-pointer',
             // 데스크톱(md) 이상에서 오버라이드
-            'lg:p-2 xl:w-44 lg:h-36 2xl:w-56 2xl:h-40 xl:text-base hover:shadow-lg',
+            'lg:p-2 xl:w-44 xl:h-36 2xl:w-56 2xl:h-40 xl:text-base hover:shadow-lg',
             getCardBackgroundClass(),
             getTextColorClass(),
             pulseClass
@@ -391,6 +391,10 @@ const Table = ({ data, onUpdate }: TableProps) => {
             <span className={cn(getTextColorClass(), 'text-xs md:text-sm')}>
               {menu || '미선택'}
             </span>
+            {/* 데스크톱에서는 숨김 */}
+            <span className='block xl:hidden'>
+              {(price * currentUsers).toLocaleString()}원
+            </span>
           </div>
 
           <div className='flex justify-between items-center mb-1'>
@@ -409,7 +413,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
 
           {/* 금액 표시도 예: 모바일/태블릿에서는 글자 크기 작게 */}
           <div className='flex justify-end items-center'>
-            <span className='text-xs md:text-base font-bold'>
+            <span className='hidden xl:block text-xs md:text-base font-bold'>
               {calculateTotalPrice().toLocaleString()}원
             </span>
           </div>
