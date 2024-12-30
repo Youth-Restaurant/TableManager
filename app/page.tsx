@@ -98,6 +98,13 @@ export default function Home() {
     forceUpdate({}); // React 렌더링 강제 트리거
   };
 
+  const handleSubmitSideDishes = () => {
+    fetch('/api/dishes', {
+      method: 'POST',
+      body: JSON.stringify({ sideArr }),
+    });
+  };
+
   // const getSortedTableNumbers = () => {
   //   return tablesData
   //     .map((table, index) => ({
@@ -330,6 +337,14 @@ export default function Home() {
                   </ul>
                 </div>
               ))}
+              <Button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  handleSubmitSideDishes();
+                }}
+              >
+                출력
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
