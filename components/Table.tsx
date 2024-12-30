@@ -143,8 +143,11 @@ const Table = ({ data, onUpdate }: TableProps) => {
 
   // 모달 열기/닫기
   const handleOpenChange = (isOpen: boolean) => {
-    if (!isOpen) return; // 닫힘 방지 로직이 필요하다면 여기
-    setOpen(true);
+    if (isOpen) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
   };
 
   const handleUpdate = async () => {
@@ -414,7 +417,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
       </DialogTrigger>
 
       {/* 모달 내용은 그대로 유지 */}
-      <DialogContent className='max-w-4xl' closeButton={false}>
+      <DialogContent className='max-w-4xl' closeButton={true}>
         <DialogHeader>
           <DialogTitle>테이블 {id}번</DialogTitle>
         </DialogHeader>
