@@ -104,15 +104,15 @@ export default function Home() {
   //     .map((table) => table.id);
   // };
 
-  // 기본 세팅이 모두 체크 완료된지 확인하는 함수
-  const isBasicChecklistComplete = (table: TableData): boolean => {
-    return Object.values(table.basicChecklist).every(Boolean);
-  };
+  // // 기본 세팅이 모두 체크 완료된지 확인하는 함수
+  // const isBasicChecklistComplete = (table: TableData): boolean => {
+  //   return Object.values(table.basicChecklist).every(Boolean);
+  // };
 
-  // 밑반찬 완료 여부
-  const isSideChecklistComplete = (table: TableData) => {
-    return Object.values(table.sideChecklist).every(Boolean);
-  };
+  // // 밑반찬 완료 여부
+  // const isSideChecklistComplete = (table: TableData) => {
+  //   return Object.values(table.sideChecklist).every(Boolean);
+  // };
 
   // "반찬 순서" = (1) 방문중, (2) 기본 세팅 완료, (3) 밑반찬 미완료
   // const getSideOrder = () => {
