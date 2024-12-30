@@ -58,6 +58,9 @@ const BANCHAN_CATEGORIES = {
 export default function Home() {
   // const [basicChecklist, setBasicChecklist] = useState(defaultBasicChecklist);
   const [sideChecklist, setSideChecklist] = useState(defaultSideChecklist);
+  const [sideArr, setSideArr] = useState<string[]>([]);
+
+  console.log('sideArr', sideArr);
 
   const [tablesData] = useState<TableData[]>(() =>
     mockTables.map((table) => ({
@@ -181,6 +184,13 @@ export default function Home() {
       ...prev,
       [itemKey]: !prev[itemKey as keyof typeof prev],
     }));
+
+    const exists = sideArr.some((item) => item === itemKey);
+    if (exists) {
+      setSideArr((prev) => prev.filter((item) => item !== itemKey));
+    } else {
+      setSideArr((prev) => [...prev, itemKey]);
+    }
   };
 
   return (
