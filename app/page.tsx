@@ -250,7 +250,8 @@ const LeftSection = ({
   onTableUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
 }) => {
   return (
-    <div className='flex flex-col gap-1 md:gap-4'>
+    <div className='flex flex-col gap-1 md:gap-4 border-r-2 pr-4'>
+      <h1>1번 홀</h1>
       <div className='flex gap-1 md:gap-2 xl:gap-4'>
         {[0, 1].map((num) => (
           <Table key={num} data={tablesData[num]} onUpdate={onTableUpdate} />
@@ -279,29 +280,32 @@ const MiddleSection = ({
   onTableUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
 }) => {
   return (
-    <div className='grid grid-cols-2 md:gap-6 xl:gap-4 w-3/5 lg:w-auto'>
-      {/* middle section의 1번째 열 */}
-      <div className='grid gap-2 md:gap-4 md:items-end'>
-        <div className='grid gap-10'>
-          {/* 7, 8번 테이블 두 개 묶음 */}
-          <div className='flex gap-1 flex-col'>
-            {[6, 7].map((num) => (
-              <Table
-                key={num}
-                data={tablesData[num]}
-                onUpdate={onTableUpdate}
-              />
-            ))}
+    <div>
+      <h1>2번 홀</h1>
+      <div className='grid grid-cols-2 md:gap-6 xl:gap-4 w-3/5 lg:w-auto'>
+        {/* middle section의 1번째 열 */}
+        <div className='grid gap-2 md:gap-4 md:items-end'>
+          <div className='grid gap-10'>
+            {/* 7, 8번 테이블 두 개 묶음 */}
+            <div className='flex gap-1 flex-col'>
+              {[6, 7].map((num) => (
+                <Table
+                  key={num}
+                  data={tablesData[num]}
+                  onUpdate={onTableUpdate}
+                />
+              ))}
+            </div>
+            {/* 9번 테이블 */}
+            <Table key={8} data={tablesData[8]} onUpdate={onTableUpdate} />
           </div>
-          {/* 9번 테이블 */}
-          <Table key={8} data={tablesData[8]} onUpdate={onTableUpdate} />
         </div>
-      </div>
-      {/* middle section의 2번째 열 */}
-      <div className='flex flex-col gap-1 lg:justify-end'>
-        {[9, 10, 11, 12].map((num) => (
-          <Table key={num} data={tablesData[num]} onUpdate={onTableUpdate} />
-        ))}
+        {/* middle section의 2번째 열 */}
+        <div className='flex flex-col gap-1 lg:justify-end'>
+          {[9, 10, 11, 12].map((num) => (
+            <Table key={num} data={tablesData[num]} onUpdate={onTableUpdate} />
+          ))}
+        </div>
       </div>
     </div>
   );
