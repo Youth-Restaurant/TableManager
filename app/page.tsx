@@ -115,39 +115,39 @@ export default function Home() {
   };
 
   // "반찬 순서" = (1) 방문중, (2) 기본 세팅 완료, (3) 밑반찬 미완료
-  const getSideOrder = () => {
-    return tableManager
-      .getTables()
-      .filter(
-        (table) =>
-          table.visitTime &&
-          table.currentUsers > 0 &&
-          isBasicChecklistComplete(table) &&
-          !isSideChecklistComplete(table)
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.visitTime!).getTime() - new Date(b.visitTime!).getTime()
-      )
-      .map((table) => table.id);
-  };
+  // const getSideOrder = () => {
+  //   return tableManager
+  //     .getTables()
+  //     .filter(
+  //       (table) =>
+  //         table.visitTime &&
+  //         table.currentUsers > 0 &&
+  //         isBasicChecklistComplete(table) &&
+  //         !isSideChecklistComplete(table)
+  //     )
+  //     .sort(
+  //       (a, b) =>
+  //         new Date(a.visitTime!).getTime() - new Date(b.visitTime!).getTime()
+  //     )
+  //     .map((table) => table.id);
+  // };
 
   // 밥 순서
-  const getRiceOrder = () => {
-    return tableManager
-      .getTables()
-      .filter(
-        (table) =>
-          table.visitTime &&
-          table.currentUsers > 0 &&
-          isSideChecklistComplete(table)
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.visitTime!).getTime() - new Date(b.visitTime!).getTime()
-      )
-      .map((table) => table.id);
-  };
+  // const getRiceOrder = () => {
+  //   return tableManager
+  //     .getTables()
+  //     .filter(
+  //       (table) =>
+  //         table.visitTime &&
+  //         table.currentUsers > 0 &&
+  //         isSideChecklistComplete(table)
+  //     )
+  //     .sort(
+  //       (a, b) =>
+  //         new Date(a.visitTime!).getTime() - new Date(b.visitTime!).getTime()
+  //     )
+  //     .map((table) => table.id);
+  // };
 
   // const [isOrderTableVisible, setIsOrderTableVisible] = useState(false);
 
