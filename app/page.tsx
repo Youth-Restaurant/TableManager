@@ -301,7 +301,7 @@ export default function Home() {
                 </div>
               </div>
             </DialogHeader>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
               {Object.values(BANCHAN_CATEGORIES).map((category) => (
                 <div key={category.title} className='bg-gray-50 p-4 rounded-lg'>
                   <h3 className='text-lg font-semibold mb-3'>
