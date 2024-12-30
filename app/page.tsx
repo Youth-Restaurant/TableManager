@@ -5,6 +5,13 @@ import { mockTables } from '@/mocks/mockTables';
 import { TableData } from '@/types/table';
 import Table from '@/components/Table';
 import TableManager from '@/utils/TableManager';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 // import { Button } from '@/components/ui/button';
 
 const defaultBasicChecklist = {
@@ -31,9 +38,26 @@ const defaultSideChecklist = {
   anchovies: false,
 };
 
+const BANCHAN_CATEGORIES = {
+  NAMUL: {
+    title: '나물 반찬',
+    items: ['숙주나물', '시금치나물', '고사리나물'],
+  },
+  KIMCHI: {
+    title: '김치류',
+    items: ['배추김치', '깍두기', '열무김치', '총각김치'],
+  },
+  JORIM: { title: '조림류', items: ['감자조림', '메추리알조림', '콩자반'] },
+  TUIGIM: { title: '튀김류', items: ['김말이', '고구마튀김', '오징어튀김'] },
+  JEOLIM: { title: '절임류', items: ['단무지', '오이피클', '양파절임'] },
+  BOKKEUM: { title: '볶음류', items: ['멸치볶음', '어묵볶음', '깻잎볶음'] },
+  JJIM: { title: '찜/전류', items: ['계란찜', '동그랑땡', '김치전'] },
+  OTHERS: { title: '기타', items: ['김', '계란말이', '두부'] },
+};
+
 export default function Home() {
   // const [basicChecklist, setBasicChecklist] = useState(defaultBasicChecklist);
-  // const [sideChecklist, setSideChecklist] = useState(defaultSideChecklist);
+  const [sideChecklist, setSideChecklist] = useState(defaultSideChecklist);
 
   const [tablesData] = useState<TableData[]>(() =>
     mockTables.map((table) => ({
@@ -47,6 +71,7 @@ export default function Home() {
 
   const [tableManager] = useState(() => new TableManager(tablesData));
   const [, forceUpdate] = useState({}); // 상태 갱신 강제 트리거
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // const handleTableUpdate = (
   //   tableNumber: number,
@@ -87,7 +112,7 @@ export default function Home() {
   //     .map((table) => table.number);
   // };
 
-  // 방문 순서 (기존)
+  // // 방문 순서 (기존)
   // const getVisitOrder = () => {
   //   return tableManager
   //     .getTables()
@@ -150,6 +175,13 @@ export default function Home() {
   // };
 
   // const [isOrderTableVisible, setIsOrderTableVisible] = useState(false);
+
+  const handleSideChecklistChange = (itemKey: string) => {
+    setSideChecklist((prev) => ({
+      ...prev,
+      [itemKey]: !prev[itemKey as keyof typeof prev],
+    }));
+  };
 
   return (
     <main className='min-h-screen w-full p-4'>
@@ -237,6 +269,60 @@ export default function Home() {
             onTableUpdate={handleTableUpdate}
           />
         </div>
+        <div className='absolute top-3 right-3 flex justify-center'>
+          <Button
+            className='bg-blue-500 text-white font-bold'
+            onClick={() => setIsModalOpen(true)}
+          >
+            반찬 세팅
+          </Button>
+        </div>
+
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className='max-w-4xl max-h-[80vh] overflow-y-auto'>
+            <DialogHeader>
+              <div className='flex items-center justify-between'>
+                <DialogTitle className='text-2xl font-bold mb-4'>
+                  반찬 세팅 순서
+                </DialogTitle>
+                <div className='text-sm text-gray-500'>
+                  선택됨: {Object.values(sideChecklist).filter(Boolean).length}{' '}
+                  / {Object.keys(sideChecklist).length}
+                </div>
+              </div>
+            </DialogHeader>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              {Object.values(BANCHAN_CATEGORIES).map((category) => (
+                <div key={category.title} className='bg-gray-50 p-4 rounded-lg'>
+                  <h3 className='text-lg font-semibold mb-3'>
+                    {category.title}
+                  </h3>
+                  <ul className='space-y-2'>
+                    {category.items.map((item) => {
+                      const itemKey = item.toLowerCase().replace(/ /g, '_');
+                      return (
+                        <li key={item} className='flex items-center space-x-2'>
+                          <input
+                            type='checkbox'
+                            id={itemKey}
+                            checked={
+                              sideChecklist[
+                                itemKey as keyof typeof sideChecklist
+                              ] || false
+                            }
+                            onChange={() => handleSideChecklistChange(itemKey)}
+                            className='rounded border-gray-300'
+                          />
+                          <label htmlFor={itemKey}>{item}</label>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </main>
   );

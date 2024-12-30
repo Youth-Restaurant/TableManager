@@ -391,7 +391,6 @@ const Table = ({ data, onUpdate }: TableProps) => {
             <span className={cn(getTextColorClass(), 'text-xs md:text-sm')}>
               {menu || '미선택'}
             </span>
-            {/* 데스크톱에서는 숨김 */}
             <span className='block xl:hidden'>
               {(price * currentUsers).toLocaleString()}원
             </span>
