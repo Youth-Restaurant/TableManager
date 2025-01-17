@@ -129,6 +129,7 @@ export default function Home() {
     tableNumber: number,
     updates: Partial<TableData>
   ) => {
+    console.log('updates', updates);
     tableManager.updateTable(tableNumber, updates);
     forceUpdate({}); // React 렌더링 강제 트리거
   };
