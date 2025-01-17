@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { mockTables } from '@/mocks/mockTables';
-import { TableData } from '@/types/table';
+import { SideDish, TableData } from '@/types/table';
 import Table from '@/components/Table';
 import TableManager from '@/utils/TableManager';
 import { Button } from '@/components/ui/button';
@@ -38,36 +38,71 @@ const defaultSideChecklist = {
   anchovies: false,
 };
 
-const BANCHAN_CATEGORIES = {
-  NAMUL: {
-    title: '나물 반찬',
-    items: ['숙주나물', '시금치나물', '고사리나물'],
-  },
-  KIMCHI: {
-    title: '김치류',
-    items: ['배추김치', '깍두기', '열무김치', '총각김치'],
-  },
-  JORIM: { title: '조림류', items: ['감자조림', '메추리알조림', '콩자반'] },
-  TUIGIM: { title: '튀김류', items: ['김말이', '고구마튀김', '오징어튀김'] },
-  JEOLIM: { title: '절임류', items: ['단무지', '오이피클', '양파절임'] },
-  BOKKEUM: { title: '볶음류', items: ['멸치볶음', '어묵볶음', '깻잎볶음'] },
-  JJIM: { title: '찜/전류', items: ['계란찜', '동그랑땡', '김치전'] },
-  OTHERS: { title: '기타', items: ['김', '계란말이', '두부'] },
-};
+const seasonedVegetables = [
+  { id: 'radish', label: '단무지', checked: false },
+  { id: 'bean_sprouts', label: '숙주나물', checked: false },
+  { id: 'spinach', label: '시금치나물', checked: false },
+  { id: 'seaweed', label: '미역줄기', checked: false },
+];
+const kimchis = [
+  { id: 'cabbageKimchi', label: '배추김치', checked: false },
+  { id: 'radishKimchi', label: '깍두기', checked: false },
+  { id: 'youngRadishKimchi', label: '열무김치', checked: false },
+  { id: 'ponytailRadishKimchi', label: '총각김치', checked: false },
+];
+const braisedDishes = [
+  { id: 'potatoBraised', label: '감자조림', checked: false },
+  { id: 'quailEggBraised', label: '메추리알조림', checked: false },
+  { id: 'soyBraised', label: '콩자반', checked: false },
+];
+
+const friedDishes = [
+  { id: 'seaweed', label: '미역줄기', checked: false },
+  { id: 'fishCake', label: '어묵볶음', checked: false },
+  { id: 'stirFry', label: '잡채', checked: false },
+];
+
+const pickledDishes = [
+  { id: 'radish', label: '단무지', checked: false },
+  { id: 'pickles', label: '절임류', checked: false },
+  { id: 'sauce', label: '초장/간장', checked: false },
+];
+
+const boiledDishes = [
+  { id: 'eggRoll', label: '계란말이', checked: false },
+  { id: 'braisedPotato', label: '감자조림', checked: false },
+];
+const stirFriedDishes = [
+  { id: 'anchovyStirFried', label: '멸치볶음', checked: false },
+  { id: 'fishCakeStirFried', label: '어묵볶음', checked: false },
+  { id: 'perillaLeafStirFried', label: '깻잎볶음', checked: false },
+];
+const otherDishes = [
+  { id: 'steamedEgg', label: '계란찜', checked: false },
+  { id: 'meatPancake', label: '동그랑땡', checked: false },
+  { id: 'kimchiPancake', label: '김치전', checked: false },
+];
+
+
+const sideDishes = [
+  {id: 1, name: 'seasonedVegetables', label: '나물류', items: seasonedVegetables},
+  {id: 2, name: 'kimchis', label: '김치류', items: kimchis},
+  {id: 3, name: 'braisedDishes', label: '조림류', items: braisedDishes},
+  {id: 4, name: 'friedDishes', label: '튀김류', items: friedDishes},
+  {id: 5, name: 'pickledDishes', label: '절임류', items: pickledDishes},
+  {id: 7, name: 'stirFriedDishes', label: '볶음류', items: stirFriedDishes},
+  {id: 8, name: 'otherDishes', label: '기타', items: otherDishes},
+]
 
 export default function Home() {
-  // const [basicChecklist, setBasicChecklist] = useState(defaultBasicChecklist);
-  const [sideChecklist, setSideChecklist] = useState(defaultSideChecklist);
-  const [sideArr, setSideArr] = useState<string[]>([]);
-
-  console.log('sideArr', sideArr);
+  const [selectedSideDishes, setSelectedSideDishes] = useState<SideDish[]>([]);
 
   const [tablesData] = useState<TableData[]>(() =>
     mockTables.map((table) => ({
       ...table,
       status: 'AVAILABLE',
       basicChecklist: { ...defaultBasicChecklist },
-      sideChecklist: { ...defaultSideChecklist },
+      sideChecklist: selectedSideDishes,
       servingCounts: { rice: 0, soup: 0 },
     }))
   );
@@ -101,7 +136,7 @@ export default function Home() {
   const handleSubmitSideDishes = () => {
     fetch('/api/dishes', {
       method: 'POST',
-      body: JSON.stringify({ sideArr }),
+      body: JSON.stringify({ selectedSideDishes }),
     });
   };
 
@@ -186,18 +221,10 @@ export default function Home() {
 
   // const [isOrderTableVisible, setIsOrderTableVisible] = useState(false);
 
-  const handleSideChecklistChange = (itemKey: string) => {
-    setSideChecklist((prev) => ({
-      ...prev,
-      [itemKey]: !prev[itemKey as keyof typeof prev],
-    }));
-
-    const exists = sideArr.some((item) => item === itemKey);
-    if (exists) {
-      setSideArr((prev) => prev.filter((item) => item !== itemKey));
-    } else {
-      setSideArr((prev) => [...prev, itemKey]);
-    }
+  const handleSelectedSideDishes = (item: SideDish) => {
+    selectedSideDishes.some((dish) => dish.id === item.id) ?
+      setSelectedSideDishes((prev) => prev.filter((dish) => dish.id !== item.id)) :
+      setSelectedSideDishes((prev) => [...prev, item]);
   };
 
   return (
@@ -275,15 +302,18 @@ export default function Home() {
         <div className='flex flex-col md:flex-row gap-5 lg:gap-4 xl:gap-8'>
           <LeftSection
             tablesData={tableManager.getTables()}
-            onTableUpdate={handleTableUpdate}
+            handleTableUpdate={handleTableUpdate}
+            selectedSideDishes={selectedSideDishes}
           />
           <MiddleSection
             tablesData={tableManager.getTables()}
-            onTableUpdate={handleTableUpdate}
+            handleTableUpdate={handleTableUpdate}
+            selectedSideDishes={selectedSideDishes}
           />
           <RightSection
             tablesData={tableManager.getTables()}
-            onTableUpdate={handleTableUpdate}
+            handleTableUpdate={handleTableUpdate}
+            selectedSideDishes={selectedSideDishes}
           />
         </div>
         <div className='absolute top-3 right-3 flex justify-center'>
@@ -303,34 +333,33 @@ export default function Home() {
                   반찬 세팅 순서
                 </DialogTitle>
                 <div className='text-sm text-gray-500'>
-                  선택됨: {Object.values(sideChecklist).filter(Boolean).length}{' '}
-                  / {Object.keys(sideChecklist).length}
+                  선택됨: {selectedSideDishes.length}{' '}
+                  / {sideDishes.reduce((acc, category) => acc + category.items.length, 0)}
                 </div>
               </div>
             </DialogHeader>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-              {Object.values(BANCHAN_CATEGORIES).map((category) => (
-                <div key={category.title} className='bg-gray-50 p-4 rounded-lg'>
+              {sideDishes.map((category) => (
+                <div key={category.name} className='bg-gray-50 p-4 rounded-lg'>
                   <h3 className='text-lg font-semibold mb-3'>
-                    {category.title}
+                    {category.label} ({category.items.length})
                   </h3>
                   <ul className='space-y-2'>
                     {category.items.map((item) => {
-                      const itemKey = item.toLowerCase().replace(/ /g, '_');
                       return (
-                        <li key={item} className='flex items-center space-x-2'>
+                        <li key={item.id} className='flex items-center space-x-2'>
                           <input
                             type='checkbox'
-                            id={itemKey}
+                            id={item.id}
                             checked={
-                              sideChecklist[
-                                itemKey as keyof typeof sideChecklist
-                              ] || false
+                              selectedSideDishes.some(
+                                (dish) => dish.id === item.id
+                              )
                             }
-                            onChange={() => handleSideChecklistChange(itemKey)}
+                            onChange={() => handleSelectedSideDishes(item)}
                             className='rounded border-gray-300'
                           />
-                          <label htmlFor={itemKey}>{item}</label>
+                          <label htmlFor={item.id}>{item.label}</label>
                         </li>
                       );
                     })}
@@ -355,28 +384,30 @@ export default function Home() {
 
 const LeftSection = ({
   tablesData,
-  onTableUpdate,
+  handleTableUpdate,
+  selectedSideDishes,
 }: {
   tablesData: { [key: number]: TableData };
-  onTableUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
+  handleTableUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
+  selectedSideDishes: SideDish[];
 }) => {
   return (
     <div className='flex flex-col gap-1 md:gap-4 border-r-2 pr-4'>
       <h1>1번 홀</h1>
       <div className='flex gap-1 md:gap-2 xl:gap-4'>
         {[0, 1].map((num) => (
-          <Table key={num} data={tablesData[num]} onUpdate={onTableUpdate} />
+          <Table key={num} data={tablesData[num]} handleTableUpdate={handleTableUpdate} selectedSideDishes={selectedSideDishes} />
         ))}
       </div>
       <div className='flex gap-1 md:gap-2 xl:gap-4'>
         {[2, 3].map((num) => (
-          <Table key={num} data={tablesData[num]} onUpdate={onTableUpdate} />
+          <Table key={num} data={tablesData[num]} handleTableUpdate={handleTableUpdate} selectedSideDishes={selectedSideDishes} />
         ))}
       </div>
       <div className='hidden md:visible'>empty</div>
       <div className='grid lg:justify-center gap-1 lg:gap-2'>
         {[4, 5].map((num) => (
-          <Table key={num} data={tablesData[num]} onUpdate={onTableUpdate} />
+            <Table key={num} data={tablesData[num]} handleTableUpdate={handleTableUpdate} selectedSideDishes={selectedSideDishes} />
         ))}
       </div>
     </div>
@@ -385,10 +416,12 @@ const LeftSection = ({
 
 const MiddleSection = ({
   tablesData,
-  onTableUpdate,
+  handleTableUpdate,
+  selectedSideDishes,
 }: {
   tablesData: { [key: number]: TableData };
-  onTableUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
+  handleTableUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
+  selectedSideDishes: SideDish[];
 }) => {
   return (
     <div>
@@ -403,18 +436,19 @@ const MiddleSection = ({
                 <Table
                   key={num}
                   data={tablesData[num]}
-                  onUpdate={onTableUpdate}
+                  handleTableUpdate={handleTableUpdate}
+                  selectedSideDishes={selectedSideDishes}
                 />
               ))}
             </div>
             {/* 9번 테이블 */}
-            <Table key={8} data={tablesData[8]} onUpdate={onTableUpdate} />
+            <Table key={8} data={tablesData[8]} handleTableUpdate={handleTableUpdate} selectedSideDishes={selectedSideDishes} />
           </div>
         </div>
         {/* middle section의 2번째 열 */}
         <div className='flex flex-col gap-1 lg:justify-end'>
           {[9, 10, 11, 12].map((num) => (
-            <Table key={num} data={tablesData[num]} onUpdate={onTableUpdate} />
+              <Table key={num} data={tablesData[num]} handleTableUpdate={handleTableUpdate} selectedSideDishes={selectedSideDishes} />
           ))}
         </div>
       </div>
@@ -424,16 +458,18 @@ const MiddleSection = ({
 
 const RightSection = ({
   tablesData,
-  onTableUpdate,
+  handleTableUpdate,
+  selectedSideDishes,
 }: {
   tablesData: { [key: number]: TableData };
-  onTableUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
+  handleTableUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
+  selectedSideDishes: SideDish[];
 }) => {
   return (
     <div className='relative lg:mt-8'>
       <div className='lg:absolute bottom-16 lg:bottom-24 flex gap-2'>
         {[13, 14].map((num) => (
-          <Table key={num} data={tablesData[num]} onUpdate={onTableUpdate} />
+          <Table key={num} data={tablesData[num]} handleTableUpdate={handleTableUpdate} selectedSideDishes={selectedSideDishes} />
         ))}
       </div>
     </div>

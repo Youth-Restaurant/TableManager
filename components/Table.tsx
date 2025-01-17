@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
-import { TableData } from '@/types/table';
+import { SideDish, TableData } from '@/types/table';
 
 // Card, Users 아이콘 import
 import { Card } from '@/components/ui/card';
@@ -28,7 +28,8 @@ import { Users } from 'lucide-react';
 
 interface TableProps {
   data: TableData;
-  onUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
+  handleTableUpdate: (tableNumber: number, updates: Partial<TableData>) => void;
+  selectedSideDishes: SideDish[];
 }
 
 const formatDate = (date: Date | null): string => {
@@ -64,27 +65,12 @@ const basicItems = [
   { id: 'spoons', label: '수저' },
 ];
 
-const sideItems = [
-  { id: 'kimchi', label: '김치' },
-  { id: 'radish', label: '단무지' },
-  { id: 'pickles', label: '절임류' },
-  { id: 'sauce', label: '초장/간장' },
-  { id: 'bean_sprouts', label: '숙주나물' },
-  { id: 'spinach', label: '시금치나물' },
-  { id: 'seaweed', label: '미역줄기' },
-  { id: 'fish_cake', label: '어묵볶음' },
-  { id: 'stir_fry', label: '잡채' },
-  { id: 'egg_roll', label: '계란말이' },
-  { id: 'braised_potato', label: '감자조림' },
-  { id: 'anchovies', label: '멸치볶음' },
-];
-
 const riceAndSoupItems = [
   { id: 'rice', label: '밥' },
   { id: 'soup', label: '국' },
 ];
 
-const Table = ({ data, onUpdate }: TableProps) => {
+const Table = ({ data, handleTableUpdate, selectedSideDishes }: TableProps) => {
   const [open, setOpen] = useState(false);
 
   // 구조 분해
@@ -96,13 +82,12 @@ const Table = ({ data, onUpdate }: TableProps) => {
     price,
     visitTime,
     basicChecklist,
-    sideChecklist,
     servingCounts,
   } = data;
 
   // 업데이트 헬퍼
   const updateTableState = (updates: Partial<TableData>) => {
-    onUpdate(id, updates);
+    handleTableUpdate(id, updates);
   };
 
   // 인원 증가/감소
@@ -167,7 +152,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
         menu,
         price,
         basicChecklist,
-        sideChecklist,
+        sideChecklist: selectedSideDishes,
         servingCounts,
       });
       setOpen(false);
@@ -187,8 +172,8 @@ const Table = ({ data, onUpdate }: TableProps) => {
   }, [basicChecklist]);
 
   const isSideChecklistComplete = useCallback(() => {
-    return Object.values(sideChecklist).every(Boolean);
-  }, [sideChecklist]);
+    return selectedSideDishes.every(dish => dish.checked);
+  }, [selectedSideDishes]);
 
   const isRiceAndSoupComplete = useCallback(() => {
     return (
@@ -213,7 +198,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
   // ------------------------
   const getTotalSteps = useCallback(() => {
     return (
-      basicItems.length + sideItems.length + 2 * currentUsers // 밥, 국 각각 currentUsers만큼 필요
+      basicItems.length + selectedSideDishes.length + 2 * currentUsers // 밥, 국 각각 currentUsers만큼 필요
     );
   }, [currentUsers]);
 
@@ -224,13 +209,13 @@ const Table = ({ data, onUpdate }: TableProps) => {
 
     // side 체크된 개수
     const sideCheckedCount =
-      Object.values(sideChecklist).filter(Boolean).length;
+      selectedSideDishes.filter(dish => dish.checked).length;
 
     // 밥 + 국 = (servingCounts.rice + servingCounts.soup)
     const mainCount = servingCounts.rice + servingCounts.soup;
 
     return basicCheckedCount + sideCheckedCount + mainCount;
-  }, [basicChecklist, sideChecklist, servingCounts]);
+  }, [basicChecklist, selectedSideDishes, servingCounts]);
 
   // ------------------------
   // 2) ProgressBar 표시
@@ -285,8 +270,8 @@ const Table = ({ data, onUpdate }: TableProps) => {
         } / ${basicItems.length}`;
       case 'side':
         return `밑반찬: ${
-          Object.values(sideChecklist).filter(Boolean).length
-        } / ${sideItems.length}`;
+          selectedSideDishes.filter(dish => dish.checked).length
+        } / ${selectedSideDishes.length}`;
       case 'main':
         return (
           <div className='flex gap-3'>
@@ -306,7 +291,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
   }, [
     getServingStage,
     basicChecklist,
-    sideChecklist,
+    selectedSideDishes,
     servingCounts,
     currentUsers,
   ]);
@@ -321,9 +306,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
       basicChecklist: Object.fromEntries(
         basicItems.map((item) => [item.id, false])
       ),
-      sideChecklist: Object.fromEntries(
-        sideItems.map((item) => [item.id, false])
-      ),
+      sideChecklist: selectedSideDishes.map(dish => ({ ...dish, checked: false })),
       servingCounts: { rice: 0, soup: 0 },
     });
     setOpen(false);
@@ -611,15 +594,13 @@ const Table = ({ data, onUpdate }: TableProps) => {
                   >
                     <div className='flex justify-between items-center'>
                       <span className='text-sm xl:text-base'>
-                        밑반찬 ({sideItems.length})
+                        밑반찬 ({selectedSideDishes.length})
                       </span>
                       <Button
                         variant='outline'
                         size='sm'
                         onClick={() => {
-                          const allChecked = Object.fromEntries(
-                            sideItems.map((item) => [item.id, true])
-                          );
+                          const allChecked = selectedSideDishes.map(dish => ({ ...dish, checked: true }));
                           updateTableState({
                             sideChecklist: allChecked,
                           });
@@ -639,17 +620,17 @@ const Table = ({ data, onUpdate }: TableProps) => {
                     : ''
                 }
               >
-                {Array.from({ length: Math.ceil(sideItems.length / 3) }).map(
+                {Array.from({ length: Math.ceil(selectedSideDishes.length / 3) }).map(
                   (_, rowIndex) => (
                     <tr key={rowIndex}>
-                      {sideItems
+                      {selectedSideDishes
                         .slice(rowIndex * 3, rowIndex * 3 + 3)
                         .map((item, colIndex) => (
                           <React.Fragment key={item.id}>
                             <td
                               className={cn(
                                 'p-1 xl:p-3 border-b text-sm xl:text-base',
-                                sideChecklist[item.id] ? 'bg-green-100' : '',
+                                item.checked ? 'bg-green-100' : '',
                                 Object.values(basicChecklist).every(Boolean)
                                   ? 'cursor-pointer hover:bg-gray-50'
                                   : 'cursor-not-allowed'
@@ -662,8 +643,8 @@ const Table = ({ data, onUpdate }: TableProps) => {
                                   return;
                                 updateTableState({
                                   sideChecklist: {
-                                    ...sideChecklist,
-                                    [item.id]: !sideChecklist[item.id],
+                                    ...selectedSideDishes,
+                                    [item.id]: !item.checked,
                                   },
                                 });
                               }}
@@ -673,20 +654,20 @@ const Table = ({ data, onUpdate }: TableProps) => {
                             <td
                               className={cn(
                                 'py-2 xl:p-3 w-12 text-center border-b',
-                                sideChecklist[item.id] ? 'bg-green-100' : '',
+                                item.checked ? 'bg-green-100' : '',
                                 colIndex < 2 ? 'border-r' : ''
                               )}
                             >
                               <Checkbox
                                 id={`side-${item.id}`}
-                                checked={sideChecklist[item.id]}
+                                checked={item.checked}
                                 disabled={
                                   !Object.values(basicChecklist).every(Boolean)
                                 }
                                 onCheckedChange={(checked) => {
                                   updateTableState({
                                     sideChecklist: {
-                                      ...sideChecklist,
+                                      ...selectedSideDishes,
                                       [item.id]: checked === true,
                                     },
                                   });
@@ -724,7 +705,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
                           });
                         }}
                         disabled={
-                          !Object.values(sideChecklist).every(Boolean) ||
+                          !selectedSideDishes.every(dish => dish.checked) ||
                           currentUsers === 0
                         }
                       >
@@ -736,7 +717,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
               </thead>
               <tbody
                 className={
-                  !Object.values(sideChecklist).every(Boolean)
+                  !selectedSideDishes.every(dish => dish.checked)
                     ? 'opacity-50'
                     : ''
                 }
@@ -766,7 +747,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
                             size='sm'
                             onClick={() => handleServingDecrement(item.id)}
                             disabled={
-                              !Object.values(sideChecklist).every(Boolean) ||
+                              !selectedSideDishes.every(dish => dish.checked) ||
                               servingCounts[
                                 item.id as keyof typeof servingCounts
                               ] <= 0
@@ -779,7 +760,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
                             size='sm'
                             onClick={() => handleServingIncrement(item.id)}
                             disabled={
-                              !Object.values(sideChecklist).every(Boolean) ||
+                              !selectedSideDishes.every(dish => dish.checked) ||
                               servingCounts[
                                 item.id as keyof typeof servingCounts
                               ] >= currentUsers
@@ -800,7 +781,7 @@ const Table = ({ data, onUpdate }: TableProps) => {
                               });
                             }}
                             disabled={
-                              !Object.values(sideChecklist).every(Boolean) ||
+                              !selectedSideDishes.every(dish => dish.checked) ||
                               currentUsers === 0
                             }
                           >

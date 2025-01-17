@@ -1,3 +1,9 @@
+export interface SideDish {
+  id: string;
+  label: string;
+  checked: boolean;
+}
+
 export interface TableData {
   id: number;
   status: TableStatus;
@@ -7,7 +13,7 @@ export interface TableData {
   price: number;
   visitTime: Date | null;
   basicChecklist: { [key: string]: boolean };
-  sideChecklist: { [key: string]: boolean };
+  sideChecklist: SideDish[];
   servingCounts: {
     rice: number;
     soup: number;

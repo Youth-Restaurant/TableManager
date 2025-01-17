@@ -30,10 +30,7 @@ class TableManager {
         wetTissue: false,
         spoons: false,
       },
-      sideChecklist: {
-        kimchi: false,
-        radish: false,
-      },
+      sideChecklist: [],
       servingCounts: {
         rice: 0,
         soup: 0,
