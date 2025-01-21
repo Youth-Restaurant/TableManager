@@ -205,7 +205,7 @@ const Table = ({ data, handleTableUpdate, selectedSideDishes }: TableProps) => {
     return (
       basicItems.length + sideDishes.length + 2 * currentUsers // 밥, 국 각각 currentUsers만큼 필요
     );
-  }, [currentUsers, sideDishes]);
+  }, [currentUsers, sideDishes.length]);
 
   const getDoneSteps = useCallback(() => {
     // basic 체크된 개수

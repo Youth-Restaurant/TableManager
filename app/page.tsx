@@ -12,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-// import { Button } from '@/components/ui/button';
 
 const defaultBasicChecklist = {
   tablecloth: false,
@@ -21,21 +20,6 @@ const defaultBasicChecklist = {
   tissue: false,
   wetTissue: false,
   spoons: false,
-};
-
-const defaultSideChecklist = {
-  kimchi: false,
-  radish: false,
-  pickles: false,
-  sauce: false,
-  bean_sprouts: false,
-  spinach: false,
-  seaweed: false,
-  fish_cake: false,
-  stir_fry: false,
-  egg_roll: false,
-  braised_potato: false,
-  anchovies: false,
 };
 
 const seasonedVegetables = [
@@ -68,10 +52,6 @@ const pickledDishes = [
   { id: 'sauce', label: '초장/간장', checked: false },
 ];
 
-const boiledDishes = [
-  { id: 'eggRoll', label: '계란말이', checked: false },
-  { id: 'braisedPotato', label: '감자조림', checked: false },
-];
 const stirFriedDishes = [
   { id: 'anchovyStirFried', label: '멸치볶음', checked: false },
   { id: 'fishCakeStirFried', label: '어묵볶음', checked: false },
@@ -223,9 +203,11 @@ export default function Home() {
   // const [isOrderTableVisible, setIsOrderTableVisible] = useState(false);
 
   const handleSelectedSideDishes = (item: SideDish) => {
-    selectedSideDishes.some((dish) => dish.id === item.id) ?
-      setSelectedSideDishes((prev) => prev.filter((dish) => dish.id !== item.id)) :
+    if (selectedSideDishes.some((dish) => dish.id === item.id)) {
+      setSelectedSideDishes((prev) => prev.filter((dish) => dish.id !== item.id));
+    } else {
       setSelectedSideDishes((prev) => [...prev, item]);
+    }
   };
 
   return (
