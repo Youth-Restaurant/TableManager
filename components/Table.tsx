@@ -205,7 +205,7 @@ const Table = ({ data, handleTableUpdate, selectedSideDishes }: TableProps) => {
     return (
       basicItems.length + sideDishes.length + 2 * currentUsers // 밥, 국 각각 currentUsers만큼 필요
     );
-  }, [currentUsers, sideDishes.length]);
+  }, [currentUsers, sideDishes.length ]);
 
   const getDoneSteps = useCallback(() => {
     // basic 체크된 개수
@@ -229,12 +229,10 @@ const Table = ({ data, handleTableUpdate, selectedSideDishes }: TableProps) => {
     const total = getTotalSteps();
     const done = getDoneSteps();
 
-    console.log(total, done);
-
     if (total === 0) return 0;
 
     return Math.floor((done / total) * 100); // 정수화
-  }, [getTotalSteps, getDoneSteps, sideDishes]);
+  }, [getTotalSteps, getDoneSteps]);
 
   // 색상 로직 (예: 0~49 빨강, 50~79 노랑, 80~99 파랑, 100 초록 등)
   const getProgressColorClass = useCallback(() => {
