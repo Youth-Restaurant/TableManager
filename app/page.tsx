@@ -27,41 +27,56 @@ const seasonedVegetables = [
   { id: 'bean_sprouts', label: '숙주나물', checked: false },
   { id: 'spinach', label: '시금치나물', checked: false },
   { id: 'seaweed', label: '미역줄기', checked: false },
+  { id: 'kingTrumpetMushroom', label: '새송이버섯나물', checked: false },
+  { id: 'eggplant', label: '가지나물', checked: false },
+  { id: 'bokChoy', label: '청경채나물', checked: false },
+  { id: 'perillaLeaf', label: '깻잎순나물', checked: false },
+  { id: 'cucumber', label: '오이참나물무침', checked: false },
 ];
+
 const kimchis = [
   { id: 'cabbageKimchi', label: '배추김치', checked: false },
   { id: 'radishKimchi', label: '깍두기', checked: false },
   { id: 'youngRadishKimchi', label: '열무김치', checked: false },
   { id: 'ponytailRadishKimchi', label: '총각김치', checked: false },
 ];
+
 const braisedDishes = [
   { id: 'potatoBraised', label: '감자조림', checked: false },
   { id: 'quailEggBraised', label: '메추리알조림', checked: false },
   { id: 'soyBraised', label: '콩자반', checked: false },
+  { id: 'braisedEgg', label: '메추리알', checked: false },
 ];
+
 
 const friedDishes = [
-  { id: 'seaweed', label: '미역줄기', checked: false },
   { id: 'fishCake', label: '어묵볶음', checked: false },
   { id: 'stirFry', label: '잡채', checked: false },
+  { id: 'stirFriedAnchovy', label: '멸치볶음', checked: false },
+  { id: 'friedPork', label: '제육볶음', checked: false },
 ];
 
+
 const pickledDishes = [
-  { id: 'radish', label: '단무지', checked: false },
   { id: 'pickles', label: '절임류', checked: false },
   { id: 'sauce', label: '초장/간장', checked: false },
 ];
 
+
 const stirFriedDishes = [
-  { id: 'anchovyStirFried', label: '멸치볶음', checked: false },
   { id: 'fishCakeStirFried', label: '어묵볶음', checked: false },
   { id: 'perillaLeafStirFried', label: '깻잎볶음', checked: false },
 ];
+
 const otherDishes = [
   { id: 'steamedEgg', label: '계란찜', checked: false },
   { id: 'meatPancake', label: '동그랑땡', checked: false },
   { id: 'kimchiPancake', label: '김치전', checked: false },
+  { id: 'eggPotatoSalad', label: '에그감자샐러드', checked: false },
+  { id: 'chickenTeriyaki', label: '치킨데리야끼', checked: false },
+  { id: 'friedPotato', label: '감자볶음', checked: false },
 ];
+
 
 
 const sideDishes = [
