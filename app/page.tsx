@@ -50,10 +50,8 @@ const braisedDishes = [
 
 
 const friedDishes = [
-  { id: 'fishCake', label: '어묵볶음', checked: false },
   { id: 'stirFry', label: '잡채', checked: false },
-  { id: 'stirFriedAnchovy', label: '멸치볶음', checked: false },
-  { id: 'friedPork', label: '제육볶음', checked: false },
+
 ];
 
 
@@ -66,6 +64,9 @@ const pickledDishes = [
 const stirFriedDishes = [
   { id: 'fishCakeStirFried', label: '어묵볶음', checked: false },
   { id: 'perillaLeafStirFried', label: '깻잎볶음', checked: false },
+  { id: 'stirFriedAnchovy', label: '멸치볶음', checked: false },
+  { id: 'friedPork', label: '제육볶음', checked: false },
+  { id: 'friedPotato', label: '감자볶음', checked: false },
 ];
 
 const otherDishes = [
@@ -74,7 +75,6 @@ const otherDishes = [
   { id: 'kimchiPancake', label: '김치전', checked: false },
   { id: 'eggPotatoSalad', label: '에그감자샐러드', checked: false },
   { id: 'chickenTeriyaki', label: '치킨데리야끼', checked: false },
-  { id: 'friedPotato', label: '감자볶음', checked: false },
 ];
 
 
