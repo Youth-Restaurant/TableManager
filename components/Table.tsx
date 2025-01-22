@@ -316,6 +316,7 @@ const Table = ({ data, handleTableUpdate, selectedSideDishes }: TableProps) => {
       sideChecklist: sideDishes.map(dish => ({ ...dish, checked: false })),
       servingCounts: { rice: 0, soup: 0 },
     });
+    setSideDishes(sideDishes.map(dish => ({ ...dish, checked: false })));
     setOpen(false);
   };
 
